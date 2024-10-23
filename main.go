@@ -38,7 +38,7 @@ func StartGRPCServer(port int) {
 
 		grpcServer := grpc.NewServer()
 
-		//register service
+		//Register gRPC service
 		swcService := services.NewSensorWeaponCoverageService()
 		controller.NewGrpcSWCService(grpcServer, swcService)
 
@@ -48,7 +48,6 @@ func StartGRPCServer(port int) {
 				log.Fatalf("could not start grpc server: %v", err)
 			}
 		}()
-		//log.Println("gRPC listening to port " + portNumber)
 	}
 }
 

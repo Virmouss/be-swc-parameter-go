@@ -1,26 +1,11 @@
 package repository
 
 import (
-	"be-swc-parameter/app/db"
 	"be-swc-parameter/app/model"
-	"log"
 	"strings"
 
 	"gorm.io/gorm"
 )
-
-type SensorWeaponCoverageRepo struct {
-	db *gorm.DB
-}
-
-func NewSWCRepo() *SensorWeaponCoverageRepo {
-
-	db, err := db.ConnectDB()
-	if err != nil {
-		log.Fatalf("Failed to connect to the database: %v", err)
-	}
-	return &SensorWeaponCoverageRepo{db: db}
-}
 
 func DeleteByIds(db *gorm.DB, newValue bool, ids []int32) error {
 

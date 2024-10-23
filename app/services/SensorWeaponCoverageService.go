@@ -78,7 +78,6 @@ func (s *SensorWeaponCoverageService) UpdateSWCParameter(ctx context.Context, sw
 	result := s.db.Model(&model.SensorWeaponCoverage{}).Where("id = ?", saved.ID).Updates(&saved)
 
 	if result.Error != nil {
-		//log.Fatal(result.Error)
 		response := swc.UpdateSWCParameterRes{
 			Id:        saved.ID,
 			Message:   "Failed to Save Data, Item Value Already Store in Database",
@@ -187,20 +186,3 @@ func (s *SensorWeaponCoverageService) GetAllSWCParameter(ctx context.Context, sw
 	}
 	return response, nil
 }
-
-// func (s *SensorWeaponCoverageService) GetCountAllData() int {
-// 	var totalData int
-
-// 	datas := repository.GetSWCCount(s.db)
-
-// 	for _, result := range datas {
-// 		item := result.Item
-// 		items := strings.Split(item, ",")
-
-// 		if len(items) == 4 {
-// 			totalData++
-// 		}
-// 	}
-// 	return totalData
-
-// }
