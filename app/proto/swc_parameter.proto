@@ -1,0 +1,96 @@
+// Which syntax this file uses.
+syntax = "proto3";
+// import "google/protobuf/timestamp.proto";
+// import "google/protobuf/struct.proto";
+// import "google/protobuf/any.proto";
+
+// Specify the package we want to use for our generated Java classes.
+option go_package = "be-swc-parameter/swc";
+
+message AddSWCParameterReq {
+    string type = 1;
+    string group = 2;
+    string item = 3;
+    string environment = 4;
+    double value = 5;
+    double default_swc = 6;
+    string unit = 7;
+}
+
+message AddSWCParameterRes {
+    int64 id = 1;
+    string message = 2;
+    string created_at = 3;
+}
+
+message UpdateSWCParameterReq {
+    int64 id = 1;
+    string type = 2;
+    string group = 3;
+    string item = 4;
+    string environment = 5;
+    double value = 6;
+    string unit = 7;
+}
+
+message UpdateSWCParameterRes {
+    int64 id = 1;
+    string message = 2;
+    string updated_at = 3;
+}
+
+message DeleteSWCParameterReq {
+  repeated int32 id = 1;
+}
+
+message DeleteSWCParameterRes {
+    string message = 2;
+}
+
+enum SortOrder {
+  ASC = 0;
+  DESC = 1;
+}
+
+message GetAllSWCParameterReq {
+    int32 page_number = 1;
+    int32 page_size = 2;
+    string group = 3;
+    string field = 4;
+    bool ascending = 5;
+}
+
+message GetAllSWCParameterRes {
+    message SWCParameterData{
+        int64 id = 1;
+        string type = 2;
+        string group = 3;
+        string item = 4;
+        string environment = 5;
+        double value = 6;
+        double default_swc = 7;
+        string unit = 8;
+        string updated_at = 9;
+        string created_at = 10;
+    }
+    repeated SWCParameterData swcParameterData = 1;
+    int32 total_data = 2;
+}
+
+
+message ErrorResponse {
+    string message = 1;
+    string errorCode = 2;
+}
+message EmptyRequest {}
+message DeleteAllSWCParameterRes {
+    string message = 1;
+}
+// Service contract
+service SWCParameters {
+    rpc addSWCParameter(AddSWCParameterReq) returns (AddSWCParameterRes);
+    rpc updateSWCParameter(UpdateSWCParameterReq) returns (UpdateSWCParameterRes);
+    rpc deleteSWCParameter(DeleteSWCParameterReq) returns (DeleteSWCParameterRes);
+    rpc deleteAllSWCParameter(EmptyRequest) returns (DeleteAllSWCParameterRes);
+    rpc GetAllSWCParameter(GetAllSWCParameterReq) returns (GetAllSWCParameterRes);
+}
