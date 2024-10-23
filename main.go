@@ -7,13 +7,16 @@ import (
 	"be-swc-parameter/utils"
 	"log"
 	"net"
-	"strconv"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 )
 
 func main() {
+	//Load environment variables from config.env
+	utils.LoadEnv()
+
 	//Database Connection
 	db, err := db.ConnectDB()
 	utils.Seed(db)
@@ -24,12 +27,12 @@ func main() {
 		log.Println("Connected to database")
 	}
 
-	StartGRPCServer(9000)
-	StartGinServer(9090)
+	StartGRPCServer()
+	StartGinServer()
 }
 
-func StartGRPCServer(port int) {
-	portNumber := strconv.Itoa(port)
+func StartGRPCServer() {
+	portNumber := os.Getenv("GRPC_PORT")
 	lis, err := net.Listen("tcp", ":"+portNumber)
 	if err != nil {
 		log.Fatalf("gRPC fail to listen on port "+portNumber+" : %v", err)
@@ -38,7 +41,7 @@ func StartGRPCServer(port int) {
 
 		grpcServer := grpc.NewServer()
 
-		//Register gRPC service
+		//register service
 		swcService := services.NewSensorWeaponCoverageService()
 		controller.NewGrpcSWCService(grpcServer, swcService)
 
@@ -51,10 +54,11 @@ func StartGRPCServer(port int) {
 	}
 }
 
-func StartGinServer(port int) {
-	portNumber := strconv.Itoa(port)
+func StartGinServer() {
+	hostName := os.Getenv("GIN_HOST")
+	portNumber := os.Getenv("GIN_PORT")
 
 	server := gin.Default()
 
-	server.Run("localhost:" + portNumber)
+	server.Run(hostName + ":" + portNumber)
 }
